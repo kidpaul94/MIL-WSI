@@ -19,6 +19,7 @@ This repository contains a simple MIL model, training pipeline, and etc. Note th
    ```Shell
    pip3 install pyvips
    ```
+   Note: I prefer to read a very large WSI (.tif file) using pyvips. You can use any other packages that can handle large images. 
    
 ## WSI pre processing
  Description will be provided soon.
@@ -32,6 +33,6 @@ This repository contains a simple MIL model, training pipeline, and etc. Note th
    ```Shell
    python3 eval.py 
    ```
-
+   
 **ToDo Lists**
 - [ ] Add train.py, eval.py, and ohter necessary files for data preprocessing.
