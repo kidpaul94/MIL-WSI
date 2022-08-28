@@ -27,7 +27,7 @@ class ClassificationPresetTrain:
         return self.transforms(img)
 
 def dataset_mean_std(dataset_path):
-    '''This function calculates mean and std for the entire images for training'''
+    '''This function calculates mean and std for the entire images for training.'''
     dataset = datasets.ImageFolder(dataset_path, transform = T.ToTensor())
     image_loader = DataLoader(dataset, batch_size = 7, shuffle = False, pin_memory = True)
 
@@ -47,7 +47,6 @@ def dataset_mean_std(dataset_path):
     mean, std = get_dimension(image_loader)
 
     return mean, std
-
 
 def make_tiles(img, tile_size: int = 1024, num_tiles: int = 0):
     '''
