@@ -1,4 +1,6 @@
 import numpy as np
+from os import listdir
+from os.path import isfile, join
 from sklearn.metrics import roc_auc_score 
 
 import torch
@@ -24,6 +26,7 @@ class ClassificationPresetTrain:
         return self.transforms(img)
 
 def dataset_mean_std(dataset_path):
+    '''This function calculates mean and std for the entire images for training'''
     dataset = datasets.ImageFolder(dataset_path, transform = T.ToTensor())
     image_loader = DataLoader(dataset, batch_size = 7, shuffle = False, pin_memory = True)
 
@@ -43,6 +46,29 @@ def dataset_mean_std(dataset_path):
     mean, std = get_dimension(image_loader)
 
     return mean, std
+
+def tile_track(dataset_path):
+    '''
+    This function generates .cvs files to store the number of tiles 
+    generated from a single training image. The expected format of the tiled images
+    is XXX_001.jpg and XXX_010.png.
+    '''
+    class_folders = [f'{dataset_path}/{f}' for f in listdir(dataset_path)]
+
+    for path in class_folders:
+        files = [(f) for f in listdir(path) if isfile(join(path, f))]
+        dict = {}
+
+        for file in files:
+            if file[:-8] in dict:
+                dict[file[:-8]] += 1
+            else:
+                dict[file[:-8]] = 1
+
+        with open(f'{path}.csv', 'w') as f:
+            f.write("%s, %s\n" % ('image_id', 'patches'))
+            for key in dict.keys():
+                f.write("%s, %s\n" % (key, dict[key]))
 
 def accuracy(output, target):    
     pred = nn.Softmax(dim = 1)(output).detach().numpy()
