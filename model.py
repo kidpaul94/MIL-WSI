@@ -12,7 +12,7 @@ class FeedForwardBlock(nn.Sequential):
         )
         
 class EncoderBlock(nn.Module):
-    """Transformer encoder block."""
+    '''Transformer encoder block.'''
 
     def __init__(
         self,
@@ -35,7 +35,7 @@ class EncoderBlock(nn.Module):
         self.mlp = FeedForwardBlock(emb_size, expansion, dropout)
 
     def forward(self, input: torch.Tensor):
-        torch._assert(input.dim() == 3, f"Expected (batch_size, seq_length, hidden_dim) got {input.shape}")
+        torch._assert(input.dim() == 3, f'Expected (batch_size, seq_length, hidden_dim) got {input.shape}')
         x = self.ln_1(input)
         x, _ = self.self_attention(query=x, key=x, value=x, need_weights=False)
         x = self.dropout(x)

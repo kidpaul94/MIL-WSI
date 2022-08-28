@@ -1,3 +1,4 @@
+import cv2 as cv
 import numpy as np
 from os import listdir
 from os.path import isfile, join
@@ -47,6 +48,43 @@ def dataset_mean_std(dataset_path):
 
     return mean, std
 
+
+def make_tiles(img, tile_size: int = 1024, num_tiles: int = 0):
+    '''
+    This function divides a large image into samller tiles and removes background
+    as much as possible. This function is designed to be used for offline preprocessing of WSI. 
+    Run this function to split WSI images into small tiles and save them in a new folder for training.
+    Note that some parts of the tissue image can be lost due to the background removal.
+    '''
+    w, h, ch = img.shape
+    pad0, pad1 = (tile_size - w%tile_size) % tile_size, (tile_size - h%tile_size) % tile_size
+    padding = [[pad0//2, pad0-pad0//2], [pad1//2, pad1-pad1//2], [0, 0]]
+    img = np.pad(img, padding, mode='reflect')
+    img = img.reshape(img.shape[0]//tile_size, tile_size, img.shape[1]//tile_size, tile_size, ch)
+    img = img.transpose(0, 2, 1, 3, 4).reshape(-1, tile_size, tile_size, ch)
+    idxs = np.argsort(img.reshape(img.shape[0], -1).sum(-1))
+    img = img[idxs]
+    
+    select_idx = []
+    
+    for idx, tile in enumerate(img):
+        gray = cv.cvtColor(tile, cv.COLOR_BGR2GRAY)
+        blur = cv.GaussianBlur(gray,(5,5),0)
+        _,th3 = cv.threshold(blur,0,255,cv.THRESH_BINARY+cv.THRESH_OTSU)
+        count = np.count_nonzero(th3) / (1024**2)
+        std = np.std(tile)
+        
+        if count > 0.80 or count < 0.15 or std < 15:
+            continue
+        else:
+            select_idx.append(idx)
+
+    if num_tiles:
+        select_idx = select_idx[:num_tiles]
+
+    img = img[select_idx] 
+    return img
+
 def tile_track(dataset_path):
     '''
     This function generates .cvs files to store the number of tiles 
@@ -66,7 +104,7 @@ def tile_track(dataset_path):
                 dict[file[:-8]] = 1
 
         with open(f'{path}.csv', 'w') as f:
-            f.write("%s, %s\n" % ('image_id', 'patches'))
+            f.write('%s, %s\n' % ('image_id', 'patches'))
             for key in dict.keys():
                 f.write("%s, %s\n" % (key, dict[key]))
 
