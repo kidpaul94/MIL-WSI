@@ -10,5 +10,13 @@ As shown above, Whole Slide Images (WSI) refers to a single high-resolution digi
 
 This repository contains a simple MIL model, training pipeline, and etc. Note that PyTorch does not have a built-in classes to handle bag-wise dataloader. Therefore, necessary features and functions (e.g., epoch and dataset shuffle) is custom built to train and test the MIL model.
 
+## Installation
+ - Clone this repository:
+   ```Shell
+   git clone https://github.com/kidpaul94/MIL_WSI.git
+   ```
+
+## WSI pre processing
+
 **ToDo Lists**
 - [ ] Add train.py, eval.py, and ohter necessary files for data preprocessing.
