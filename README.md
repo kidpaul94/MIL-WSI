@@ -1,2 +1,2 @@
 # MIL_WSI
-Multi-Instance Learning (MIL) for Whole Slide Image (WSI) classification
+Multi-Instance Learning (MIL) is one type of semi-supervised learning technique. In pathology, professionals deal with Whole Slide Images (WSI) of tissues to diagnosing cancer to managing chronic diseases through accurate laboratory testing. Just like every other fields, deel learning is getting implemented in pathology. However, especially in WSI classification, it is challenging to utilize such technique due to their ultra high resolution (~60K). Hence, researchers have tried to use MIL to subdivide WSI into multiple ROIs to reduce the overall dimension of the WSI while maintaining detail features and patterns of tissues. 
