@@ -18,7 +18,7 @@ def validation(model, criterion, bag_size, test_path, transform):
 def engine(model, device, criterion, optimizer, lr_scheduler, scaler, total_data, iterate, batch_size, bag_size, train_path, test_path):
     '''
     This function is written for training the binary classification MIL model
-    Several modification is needed for multiclass classification 
+    Several modifications are needed for multiclass classification 
     (e.g., line 33 ~ 34 & line 50 ~ 58)
     '''
     roots = [f'{train_path}/{f}' for f in listdir(train_path)]
