@@ -1,4 +1,4 @@
-# MIL_WSI
+# MIL-WSI
 
 **What are MIL and WSI?**
 
