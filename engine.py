@@ -30,8 +30,8 @@ def engine(model, device, criterion, optimizer, lr_scheduler, scaler, total_data
     We are currently using 3 metrics for training evaluation: 
     training loss, accuarcy, and ROC_AUC
     '''
-    counter = [0, 0] # Counters to iterate over the image dataset
-    draw_order = [0, 1] # The draw order of class in each mini-batch
+    counter = [0, 0] # Counters to iterate over the image dataset during training
+    draw_order = [0, 1] # The draw order of classes in each mini-batch
     labels, preds = [], [] # Place holder to store data to calculate ROC_AUC
     epoch_loss, epoch_err = 0.0, 0.0 # Evaluation metrics for training process
     epoch_size = total_data // batch_size 
