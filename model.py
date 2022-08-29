@@ -13,7 +13,6 @@ class FeedForwardBlock(nn.Sequential):
         
 class EncoderBlock(nn.Module):
     '''Transformer encoder block.'''
-
     def __init__(
         self,
         num_heads: int = 6,

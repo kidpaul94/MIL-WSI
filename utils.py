@@ -107,14 +107,16 @@ def tile_track(dataset_path):
             for key in dict.keys():
                 f.write("%s, %s\n" % (key, dict[key]))
 
-def accuracy(output, target):    
+def accuracy(output, target):
+    '''Accuracy calculation using L1 distance'''
     pred = nn.Softmax(dim = 1)(output).detach().numpy()
     target = target.detach().numpy()
     
-    return np.linalg.norm(pred-target, ord=1), pred[0] # L1 distance
+    return np.linalg.norm(pred-target, ord=1), pred[0]
 
 def eval_auc(y_true, y_prob):
+    '''ROC_AUC'''
     y_true = np.asarray(y_true).astype(np.float32)
     y_prob = np.asarray(y_prob).astype(np.float32)
 
-    return roc_auc_score(y_true, y_prob) # ROC_AUC 
+    return roc_auc_score(y_true, y_prob)
