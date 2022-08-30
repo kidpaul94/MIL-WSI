@@ -109,7 +109,7 @@ def tile_track(dataset_path):
         with open(f'{path}.csv', 'w') as f:
             f.write('%s, %s\n' % ('image_id', 'patches'))
             for key in dict.keys():
-                f.write("%s, %s\n" % (key, dict[key]))
+                f.write('%s, %s\n' % (key, dict[key]))
 
 def accuracy(output, target):
     '''Accuracy calculation using L1 distance'''
