@@ -157,7 +157,8 @@ def engine(model, device, criterion, optimizer, lr_scheduler, scaler, total_data
                 
                 '''Save the checkpoint and continue training'''
                 checkpoint = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), 
-                            'lr_scheduler': lr_scheduler.state_dict(), 'scaler': scaler.state_dict(),}
+                            'lr_scheduler': lr_scheduler.state_dict(), 'scaler': scaler.state_dict(), 
+                            'epoch': 5 * i // (epoch_size * 4)}
                 print('Saving the weights...')
                 torch.save(checkpoint, f'./{i}_model.pth')
                 model.train()
