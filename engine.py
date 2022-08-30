@@ -7,13 +7,44 @@ from os import listdir
 
 import torch
 import torch.nn as nn
-
+from torchvision.transforms.functional import to_tensor
 from utils import ClassificationPresetTrain, accuracy, eval_auc
 
-def validation(model, criterion, bag_size, test_path, transform):
+def validation(model, device, bag_size, test_path):
     model.eval()
     softmax = nn.Softmax(dim = 1)
     print("Prediction...")
+
+    '''Validation dataset information (# of patches & labels)'''
+    data = pd.read_csv(f'{test_path}.csv')
+    labels = [label['label'].tolist() for label in data]  
+    patches = [num_patch[' patches'].tolist() for num_patch in data]   
+    
+    for key in patches.keys():
+        
+        '''Number of instances selection'''
+        num_instance = bag_size if patches[key] > bag_size else patches[key]
+        
+        '''Stacking all images in each bag using batch'''
+        for i in range(num_instance):
+            img_original = cv.imread(f'{test_path}/{key}_{i:03d}.jpg')   
+            image = to_tensor(img_original).unsqueeze(0)
+            if i == 0:
+                img_stack = image
+            else:
+                img_stack = torch.cat([img_stack, image], dim=0)
+            del image
+            gc.collect()
+
+        '''Actual Evaluation'''
+        img_stack = img_stack.to(device).float()
+        output = model(img_stack)
+        
+        pred = softmax(output.cpu()).detach().numpy()
+        del output, img_stack 
+        torch.cuda.empty_cache()
+        
+        print(f'Name: {key} | Label: {labels[key]} |CE: {pred[0,0]:.4f} | LAA: {pred[0,1]:.4f}')
 
 def engine(model, device, criterion, optimizer, lr_scheduler, scaler, total_data, iterate, batch_size, bag_size, train_path, test_path):
     '''
@@ -122,11 +153,11 @@ def engine(model, device, criterion, optimizer, lr_scheduler, scaler, total_data
                 ToDo: Change the evaluation function to validate the perforamce using the rest of the dataset
                 Currently, implementating this in the evaluation function causes CUDA out of memory (16GB GPU)
                 '''
-                validation(model, criterion, bag_size, test_path, transform)
+                validation(model, device, bag_size, test_path)
                 
                 '''Save the checkpoint and continue training'''
                 checkpoint = {'model': model.state_dict(), 'optimizer': optimizer.state_dict(), 
-                            'lr_scheduler': lr_scheduler.state_dict(), 'scaler': scaler.state_dict(), 'epoch': i,}
+                            'lr_scheduler': lr_scheduler.state_dict(), 'scaler': scaler.state_dict(),}
                 print('Saving the weights...')
                 torch.save(checkpoint, f'./{i}_model.pth')
                 model.train()
