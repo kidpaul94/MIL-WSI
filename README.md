@@ -35,5 +35,5 @@ This repository contains a simple MIL model, training pipeline, and etc for ***b
    ```
    
 **ToDo Lists**
-- [ ] Add train.py, eval.py, and ohter necessary files for data preprocessing.
+- [x] Add train.py, eval.py, and other necessary files for data preprocessing.
 - [ ] Add some description about how pre-processing of WSIs is done.
