@@ -21,12 +21,10 @@ parser.add_argument('--num_data', default=None, type=int,
 parser.add_argument('--resume', default=None, type=str,
                     help='Checkpoint state_dict file to resume training from. If this is "interrupt"'\
                          ', the model will resume training from the interrupt file.')
-parser.add_argument('--checkpoint_path', default=None, type=bool,
-                    help='Checkpoint state_dict file to resume training from. If this is "interrupt"'\
-                         ', the model will resume training from the interrupt file.')
-parser.add_argument('--start_iter', default=0, type=int,
-                    help='Resume training at this iter. If this is -1, the iteration will be'\
-                         'determined from the file name.')
+parser.add_argument('--train_path', default=None, type=str,
+                    help='Path of train dataset')
+parser.add_argument('--test_path', default=None, type=str,
+                    help='Path of test dataset')
 args = parser.parse_args()
 
 def main():
@@ -45,17 +43,18 @@ def main():
     '''Load pretrained model if args.resume exists'''
     if args.resume:
         checkpoint = torch.load(args.resume, map_location=device)
-        model.load_state_dict(checkpoint["model"])
-        optimizer.load_state_dict(checkpoint["optimizer"])
+        model.load_state_dict(checkpoint['model'])
+        optimizer.load_state_dict(checkpoint['optimizer'])
         optimizer.param_groups[0]['capturable'] = True
-        lr_scheduler.load_state_dict(checkpoint["lr_scheduler"])
-        start_iter = checkpoint["epoch"]
-        scaler.load_state_dict(checkpoint["scaler"])
+        lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
+        start_iter = checkpoint['epoch']
+        scaler.load_state_dict(checkpoint['scaler'])
 
         del checkpoint
         torch.cuda.empty_cache()
 
-    engine(model, device, criterion, optimizer, lr_scheduler, args.epoch - start_iter, args.batch_size, args.bag_size, args.num_data, scaler)
+    engine(model, device, criterion, optimizer, lr_scheduler, scaler, args.num_data, args.epoch - start_iter, 
+           args.batch_size, args.bag_size, args.train_path, args.test_path)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

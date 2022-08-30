@@ -13,7 +13,7 @@ from utils import ClassificationPresetTrain, accuracy, eval_auc
 def validation(model, device, bag_size, test_path):
     model.eval()
     softmax = nn.Softmax(dim = 1)
-    print("Prediction...")
+    print('Prediction...')
 
     '''Validation dataset information (# of patches & labels)'''
     data = pd.read_csv(f'{test_path}.csv')
