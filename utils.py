@@ -73,6 +73,10 @@ def make_tiles(img, tile_size: int = 1024, num_tiles: int = 0):
         count = np.count_nonzero(th3) / (1024**2)
         std = np.std(tile)
         
+        '''
+        These threshold values are empirically defined based on my usage.
+        Change these values based on your application and dataset.
+        '''
         if count > 0.80 or count < 0.15 or std < 15:
             continue
         else:
