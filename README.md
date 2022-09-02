@@ -28,7 +28,7 @@ Following is the folder structure required to train and test the MIL in this rep
     │   ├── class_01             # Class folder
     │   │   ├── image01_000.png  # tiled image of an original WSI
     │   │   ├── image01_001.png         
-    |   │   └── image02_002.png
+    |   │   └── image01_002.png
     |   └── class_02
     ├── train.csv                #.csv file which saves the number of tiles for each WSI
     ├── test                     
