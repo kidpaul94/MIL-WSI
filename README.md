@@ -11,6 +11,7 @@ As shown above, Whole Slide Images (WSI) refers to a single high-resolution digi
 This repository contains a simple MIL model, training pipeline, and etc for ***binary classification***. Note that PyTorch does not have a built-in classes to handle bag-wise dataloading. Therefore, necessary features and functions (e.g., epoch and dataset shuffle) is custom built to train and test the MIL model.
 
 ## Installation
+
  - Clone this repository:
    ```Shell
    git clone https://github.com/kidpaul94/MIL_WSI.git
@@ -22,6 +23,7 @@ This repository contains a simple MIL model, training pipeline, and etc for ***b
    Note: I prefer to read a very large WSI (.tif file) using pyvips. You can use any other packages that can handle large images. 
    
 ## WSI pre-processing
+
 Following is the folder structure required to train and test the MIL in this repository.
 
     ├── train                    # Train dataset
@@ -41,6 +43,7 @@ Then follow [Imagenet](https://www.image-net.org/) dataset folder structure and 
 run [tile_track](https://github.com/kidpaul94/MIL-WSI/blob/a00c6ea1bf09d57879c3fea3d86a9d3585d72bcc/utils.py#L91) to generate .csv files shown above.
 
 ## Training & Inference
+
  - How to train the network:
    ```Shell
    python3 train.py 
@@ -51,5 +54,6 @@ run [tile_track](https://github.com/kidpaul94/MIL-WSI/blob/a00c6ea1bf09d57879c3f
    ```
    
 **ToDo Lists**
+
 - [x] Add train.py, eval.py, and other necessary files for data preprocessing.
 - [x] Add some description about how pre-processing of WSIs is done.
